@@ -1,0 +1,5 @@
+click=8.0.1
+tqdm=4.64.0
+uefi_firmware=1.9
+futures=3.1.1
+pydevd_pycharm
