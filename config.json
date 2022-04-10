@@ -1,0 +1,5 @@
+{
+  "PE_DIR": "modules",
+  "IDA_PATH": "/Applications/IDA Pro 7.0/ida.app/Contents/MacOS/ida",
+  "IDA64_PATH": "/Applications/IDA Pro 7.0/ida64.app/Contents/MacOS/ida64"
+}
