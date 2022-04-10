@@ -243,7 +243,7 @@ if __name__ == '__main__':
     variable_list = analyser.get_get_variable_services()
     file_name = idaapi.get_input_file_path()
     file_name = file_name.split("/")[-1]
-    log_path = os.path.join(os.path.dirname(__file__), "log", "{}_log.txt".format(file_name))
+    log_path = os.path.join(os.path.dirname(__file__), "logs", "{}_log.txt".format(file_name))
     if variable_list:
         with open(log_path, 'wb') as f:
             f.write(json.dumps(variable_list).encode())

@@ -12,6 +12,7 @@ from utils import get_machine_type, IMAGE_FILE_MACHINE_I386
 CONFIG_PATH = 'config.json'
 with open(CONFIG_PATH, 'rb') as config_file:
     CONFIG = json.load(config_file)
+LOG_PATH = "./helper/logs"
 IDA_PATH = '"{}"'.format(CONFIG['IDA_PATH'])
 IDA64_PATH = '"{}"'.format(CONFIG['IDA64_PATH'])
 
@@ -22,6 +23,14 @@ def clear(dirname):
             os.remove(os.path.join(root, name))
         for name in dirs:
             os.rmdir(os.path.join(root, name))
+    os.rmdir(dirname)
+
+
+def init_dirs():
+    if not os.path.exists(CONFIG['PE_DIR']):
+        os.mkdir(CONFIG['PE_DIR'])
+    if not os.path.exists(LOG_PATH):
+        os.mkdir(LOG_PATH)
 
 
 def clear_ida_bak(dirname):
@@ -39,9 +48,12 @@ def get_pe_files(bin_path, output_path):
     if parser.type() == 'unknown':
         print('[-] This type of binary is not supported')
     firmware = parser.parse()
-    firmware.dump("./temp")
-    find_pe_files("./temp", output_path)
-    clear("./temp")
+    temp_dir = "./output_temp"
+    if not os.path.exists(temp_dir):
+        os.mkdir(temp_dir)
+    firmware.dump(temp_dir)
+    find_pe_files(temp_dir, output_path)
+    clear(temp_dir)
 
 
 def find_pe_files(dump_path, output_path):
@@ -79,7 +91,7 @@ def analyse_module(module):
 
 
 def generate_result():
-    re = os.path.join(os.path.dirname(__file__), "helper/log", "*.txt")
+    re = os.path.join(os.path.dirname(__file__), "helper/logs", "*.txt")
     logs = []
     for file in glob(re):
         with open(file, 'r') as f:
@@ -93,7 +105,7 @@ def generate_result():
 @click.option("-w", '--max_workers', default=6, help="Number of workers", type=int)
 @click.option("-b", "--binary", help="path of UEFI bin")
 def start_analyse(max_workers, binary):
-    clear_ida_bak("modules")
+    init_dirs()
     get_pe_files(binary, CONFIG['PE_DIR'])
     temp = os.listdir(CONFIG['PE_DIR'])
     modules = []
