@@ -93,7 +93,6 @@ def generate_result():
 @click.option("-w", '--max_workers', default=6, help="Number of workers", type=int)
 @click.option("-b", "--binary", help="path of UEFI bin")
 def start_analyse(max_workers, binary):
-    generate_result()
     clear_ida_bak("modules")
     get_pe_files(binary, CONFIG['PE_DIR'])
     temp = os.listdir(CONFIG['PE_DIR'])
@@ -117,6 +116,7 @@ def start_analyse(max_workers, binary):
         }
         for _ in tqdm(as_completed(futures), **params):
             pass
+    generate_result()
     clear_ida_bak("modules")
 
 
