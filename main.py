@@ -68,7 +68,7 @@ def find_pe_files(dump_path, output_path):
                     with open(glob(ui_paths)[0], 'rb') as ui:
                         pe_name = ui.read().replace(b'\x00', b'').decode('utf-8')
                 else:
-                    pe_guid = root.split("file-")[1].upper()
+                    pe_guid = root.split("file-")[-1].split("/")[0].upper()
                     pe_name = UEFI_GUIDS.get(pe_guid)
                     if not pe_name:
                         pe_name = pe_guid
